@@ -49,6 +49,22 @@ namespace AggregateFunctionSample
                 // This is called to get the final result
                 context => Math.Sqrt(context.Sum / (context.Count - 1)));
 
+            connection.CreateAggregate<string, StdDevContext, double>
+            (
+                "test",
+                new StdDevContext(),
+                //(StdDevContext contextTemp, string strTemp) =>
+                //{
+                //    return new StdDevContext();
+                //},
+                (x, y) => { return new StdDevContext(); },
+                (StdDevContext contextTemp) =>
+                {
+                    return 3D;
+                },
+                1.Equals(2)
+            );
+
             var queryCommand = connection.CreateCommand();
             queryCommand.CommandText =
             @"
@@ -58,6 +74,8 @@ namespace AggregateFunctionSample
             var stdDev = (double)queryCommand.ExecuteScalar();
 
             Console.WriteLine($"Standard deviation: {stdDev}");
+            Console.ReadKey();
+
         }
 
         struct StdDevContext
